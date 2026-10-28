@@ -83,7 +83,8 @@ jobs:
         with:
           target: "http://127.0.0.1:5000"
           rules_file_name: "zap-config/zap-rules.tsv"
-          fail_action: false  # report findings but don't block on baseline
+          fail_action: false            # report findings but don't block on baseline
+          allow_issue_writing: false    # no automatic GitHub issues from ZAP
 
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
