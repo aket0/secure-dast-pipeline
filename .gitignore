@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Test / coverage
+.coverage
+htmlcov/
+.pytest_cache/
+coverage.xml
+.ruff_cache/
+
+# ZAP reports (generated — never commit)
+zap-report.html
+zap-report.json
+zap-report.xml
+
+# Secrets
+*.env
+.env*
+secrets/
+
+# Docker
+*.log

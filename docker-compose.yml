@@ -1,0 +1,48 @@
+version: "3.9"
+
+# DAST isolated environment
+# Both services communicate only on the internal 'dast-net' network.
+# No ports are exposed to the host by default.
+# To run: docker-compose up --abort-on-container-exit
+# Results are written to ./zap-reports/
+
+services:
+  target:
+    build:
+      context: .
+      dockerfile: Dockerfile.target
+    environment:
+      APP_ENV: "test"
+    networks:
+      - dast-net
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  zap:
+    image: ghcr.io/zaproxy/zaproxy:stable
+    depends_on:
+      target:
+        condition: service_healthy
+    networks:
+      - dast-net
+    volumes:
+      - ./zap-reports:/zap/wrk:rw
+      - ./zap-config:/zap/config:ro
+    command: >
+      zap-baseline.py
+        -t http://target:5000
+        -r zap-report.html
+        -J zap-report.json
+        -l WARN
+        -I
+    environment:
+      ZAP_AUTH_HEADER: ""
+
+networks:
+  dast-net:
+    driver: bridge
+    internal: true  # No external connectivity from scan environment

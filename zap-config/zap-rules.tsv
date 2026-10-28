@@ -1,0 +1,25 @@
+# ZAP alert rule overrides
+# Format: AlertID\tACTION\tPARAMETERS
+# Actions: PASS (ignore), WARN (warn only), FAIL (block)
+# See: https://www.zaproxy.org/docs/docker/baseline-scan/
+
+# Anti-clickjacking header — FAIL (blocking)
+10020	FAIL
+
+# X-Content-Type-Options — WARN (non-blocking for demo app)
+10021	WARN
+
+# Strict-Transport-Security — WARN (not HTTPS in local test)
+10035	WARN
+
+# Application Error Disclosure — FAIL
+90022	FAIL
+
+# XSS — FAIL (we expect this on /search, PASS on /search/safe)
+40012	FAIL
+
+# SQL Injection — FAIL
+40018	FAIL
+
+# Command Injection — FAIL
+90020	FAIL
