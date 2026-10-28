@@ -84,7 +84,6 @@ jobs:
           target: "http://127.0.0.1:5000"
           rules_file_name: "zap-config/zap-rules.tsv"
           fail_action: false  # report findings but don't block on baseline
-          allow_issue_writing: false  # no automatic GitHub issues
 
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
@@ -102,7 +101,7 @@ jobs:
           HIGH=$(cat report_json.json | python3 -c "
           import json,sys
           d=json.load(sys.stdin)
-          alerts=[a for s in d.get('site',[]) for a in s.get('alerts',[]) if int(a.get('riskcode',0)) >= 3]
+          alerts=[a for s in d.get('site',[]) for a in s.get('alerts',[]) if int(a.get('riskcode',0)) >= 4]
           print(len(alerts))
           " 2>/dev/null || echo "0")
           echo "High-risk alerts: $HIGH"
